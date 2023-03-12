@@ -2,22 +2,14 @@ DROP DATABASE IF EXISTS shop_of_magazines;
 CREATE DATABASE shop_of_magazines CHAR SET utf8;
 USE shop_of_magazines;
 
-CREATE TABLE role (
-  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL
-);
-
 CREATE TABLE user (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(45) NOT NULL,
   email VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL,
-  role_id INT NOT NULL
+  role VARCHAR(45) NOT NULL
 );  
-
-ALTER TABLE user ADD FOREIGN KEY (role_id) 
-	REFERENCES role(id);
 
 CREATE TABLE magazine (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

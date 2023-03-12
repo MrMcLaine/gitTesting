@@ -1,7 +1,7 @@
 package ua.magazines.web;
 
 import ua.magazines.entity.User;
-import ua.magazines.service.UserService;
+import ua.magazines.service.OldUserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +13,7 @@ import java.io.Serial;
 public class RegistrationServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final UserService userService = UserService.getUserService();
+    private final OldUserService userService = OldUserService.getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

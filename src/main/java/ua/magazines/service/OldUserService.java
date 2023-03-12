@@ -5,16 +5,16 @@ import ua.magazines.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService {
+public class OldUserService {
     List<User> listOfUsers = new ArrayList<>();
-    private static UserService userService;
+    private static OldUserService userService;
 
-    private UserService() {
+    private OldUserService() {
     }
 
-    public static UserService getUserService() {
+    public static OldUserService getUserService() {
         if (userService == null) {
-            userService = new UserService();
+            userService = new OldUserService();
         }
         return userService;
     }
