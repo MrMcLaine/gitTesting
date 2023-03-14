@@ -1,7 +1,8 @@
 package ua.magazines.web;
 
 import ua.magazines.entity.User;
-import ua.magazines.service.OldUserService;
+import ua.magazines.service.UserService;
+import ua.magazines.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,12 +15,7 @@ import java.util.NoSuchElementException;
 public class LoginServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final OldUserService userService = OldUserService.getUserService();
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("login.jsp").forward(req, resp);
-    }
+    private final UserService userService = UserServiceImpl.getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +24,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         try {
-            User user = userService.getUser(login);
+            User user = userService.getUserByEmail(login);
 
             if (user.getPassword().equals(password)) {
                 req.setAttribute("email", login);

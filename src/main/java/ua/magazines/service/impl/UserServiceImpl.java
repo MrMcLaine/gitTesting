@@ -11,11 +11,18 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
-
+    private static UserServiceImpl userServiceImpl;
     private final UserDao userDao;
 
-    public UserServiceImpl() {
+    private UserServiceImpl() {
         this.userDao = new UserDaoImpl();
+    }
+
+    public static UserService getUserService() {
+        if (userServiceImpl == null) {
+            userServiceImpl = new UserServiceImpl();
+        }
+        return userServiceImpl;
     }
 
     @Override
@@ -46,5 +53,10 @@ public class UserServiceImpl implements UserService {
     public List<User> readAll() {
         LOGGER.info("read all users");
         return userDao.readAll();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
 }

@@ -11,12 +11,20 @@ import java.util.List;
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private static final Logger LOGGER = Logger.getLogger(SubscriptionServiceImpl.class);
-
+    private static SubscriptionService subscriptionServiceImpl;
     private final SubscriptionDao subscriptionDao;
 
-    public SubscriptionServiceImpl() {
+    private SubscriptionServiceImpl() {
         this.subscriptionDao = new SubscriptionDaoImpl();
     }
+
+    public static SubscriptionService getSubscriptionService() {
+        if (subscriptionServiceImpl == null) {
+            subscriptionServiceImpl = new SubscriptionServiceImpl();
+        }
+        return subscriptionServiceImpl;
+    }
+
 
     @Override
     public Subscription create(Subscription subscription) {

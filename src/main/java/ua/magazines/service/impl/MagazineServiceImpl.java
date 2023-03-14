@@ -11,10 +11,19 @@ import java.util.List;
 public class MagazineServiceImpl implements MagazineService {
     private static final Logger LOGGER = Logger.getLogger(MagazineServiceImpl.class);
 
+    private static MagazineService magazineServiceImpl;
+
     private final MagazineDao magazineDao;
 
-    public MagazineServiceImpl() {
+    private MagazineServiceImpl() {
         this.magazineDao = new MagazineDaoImpl();
+    }
+
+    public static MagazineService getMagazineService() {
+        if (magazineServiceImpl == null) {
+            magazineServiceImpl = new MagazineServiceImpl();
+        }
+        return magazineServiceImpl;
     }
 
     @Override

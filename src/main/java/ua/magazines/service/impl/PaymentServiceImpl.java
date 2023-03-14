@@ -11,10 +11,19 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
     private static final Logger LOGGER = Logger.getLogger(PaymentServiceImpl.class);
 
+    private static PaymentService paymentServiceImpl;
+
     private final PaymentDao paymentDao;
 
-    public PaymentServiceImpl() {
+    private PaymentServiceImpl() {
         this.paymentDao = new PaymentDaoImpl();
+    }
+
+    public static PaymentService getPaymentService() {
+        if (paymentServiceImpl == null) {
+            paymentServiceImpl = new PaymentServiceImpl();
+        }
+        return paymentServiceImpl;
     }
 
     @Override

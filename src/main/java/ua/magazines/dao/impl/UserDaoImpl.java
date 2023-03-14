@@ -19,6 +19,7 @@ public class UserDaoImpl implements UserDao {
     private static final String CREATE = "INSERT INTO user(first_name, last_name, email, password, role) " +
                                          "VALUES (?, ?, ?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM user WHERE id = ?";
+    private static final String READ_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
     private static final String UPDATE_BY_ID = "UPDATE user SET " +
                                                "first_name = ?, last_name = ?, email = ?, password = ?, " +
                                                "role = ? WHERE id = ?";
@@ -131,5 +132,29 @@ public class UserDaoImpl implements UserDao {
             LOGGER.error(e);
         }
         return userRecords;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        User user = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(READ_BY_EMAIL);
+            preparedStatement.setString(1, email);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+
+            Integer userId = result.getInt("id");
+            String firstName = result.getString("first_name");
+            String lastName = result.getString("last_name");
+            String password = result.getString("password");
+            Role role = Role.valueOf(result.getString("role"));
+
+            user = new User(userId, firstName, lastName, email, password, role);
+
+        } catch (SQLException e) {
+            LOGGER.error(e);
+        }
+        return user;
     }
 }
