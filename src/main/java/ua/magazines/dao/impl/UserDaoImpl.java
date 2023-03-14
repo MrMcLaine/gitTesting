@@ -1,5 +1,6 @@
 package ua.magazines.dao.impl;
 
+import org.apache.log4j.Logger;
 import ua.magazines.dao.UserDao;
 import ua.magazines.entity.Role;
 import ua.magazines.entity.User;
@@ -12,6 +13,8 @@ import java.util.List;
 import static ua.magazines.util.ConnectionUtil.openConnection;
 
 public class UserDaoImpl implements UserDao {
+
+    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
     private static final String READ_ALL = "SELECT * FROM user";
     private static final String CREATE = "INSERT INTO user(first_name, last_name, email, password, role) " +
                                          "VALUES (?, ?, ?, ?, ?)";
@@ -21,12 +24,18 @@ public class UserDaoImpl implements UserDao {
                                                "role = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM user WHERE id = ?";
 
-    private final Connection connection;
+    private Connection connection;
     private PreparedStatement preparedStatement;
 
-    public UserDaoImpl() throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this.connection = openConnection();
+    public UserDaoImpl() {
+        try {
+            this.connection = openConnection();
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                 | InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error(e);
+        }
     }
+
 
     @Override
     public User create(User user) {
@@ -43,14 +52,14 @@ public class UserDaoImpl implements UserDao {
             rs.next();
             user.setId(rs.getInt(1));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return user;
     }
 
     @Override
     public User read(Integer id) {
-        User user;
+        User user = null;
 
         try {
             preparedStatement = connection.prepareStatement(READ_BY_ID);
@@ -68,7 +77,7 @@ public class UserDaoImpl implements UserDao {
             user = new User(userId, firstName, lastName, email, password, role);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
 
         return user;
@@ -85,7 +94,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(5, String.valueOf(user.getRole()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return user;
     }
@@ -97,7 +106,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -119,7 +128,7 @@ public class UserDaoImpl implements UserDao {
                 userRecords.add(new User(userId, firstName, lastName, email, password, role));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return userRecords;
     }

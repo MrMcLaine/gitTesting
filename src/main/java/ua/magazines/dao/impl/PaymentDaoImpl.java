@@ -1,5 +1,6 @@
 package ua.magazines.dao.impl;
 
+import org.apache.log4j.Logger;
 import ua.magazines.dao.PaymentDao;
 import ua.magazines.entity.Payment;
 
@@ -12,17 +13,23 @@ import static ua.magazines.util.ConnectionUtil.openConnection;
 
 public class PaymentDaoImpl implements PaymentDao {
 
+    private static final Logger LOGGER = Logger.getLogger(PaymentDaoImpl.class);
     private static final String READ_ALL = "SELECT * FROM payment";
     private static final String CREATE = "INSERT INTO payment(user_id, magazine_id, date_of_payment, sum_payment) " +
                                          "VALUES (?, ?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM payment WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM payment WHERE id = ?";
 
-    private final Connection connection;
+    private Connection connection;
     private PreparedStatement preparedStatement;
 
-    public PaymentDaoImpl() throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this.connection = openConnection();
+    public PaymentDaoImpl() {
+        try {
+            this.connection = openConnection();
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                 | InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override
@@ -39,14 +46,14 @@ public class PaymentDaoImpl implements PaymentDao {
             rs.next();
             payment.setId(rs.getInt(1));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return payment;
     }
 
     @Override
     public Payment read(Integer id) {
-        Payment payment;
+        Payment payment = null;
 
         try {
             preparedStatement = connection.prepareStatement(READ_BY_ID);
@@ -63,7 +70,7 @@ public class PaymentDaoImpl implements PaymentDao {
             payment = new Payment(paymentId, userId, magazineId, dateOfPayment, sumPayment);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
 
         return payment;
@@ -76,7 +83,7 @@ public class PaymentDaoImpl implements PaymentDao {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -97,7 +104,7 @@ public class PaymentDaoImpl implements PaymentDao {
                 paymentRecords.add(new Payment(paymentId, userId, magazineId, dateOfPayment, sumPayment));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return paymentRecords;
     }

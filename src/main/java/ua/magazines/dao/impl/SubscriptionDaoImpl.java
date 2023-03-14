@@ -1,5 +1,6 @@
 package ua.magazines.dao.impl;
 
+import org.apache.log4j.Logger;
 import ua.magazines.dao.SubscriptionDao;
 import ua.magazines.entity.Subscription;
 
@@ -12,6 +13,7 @@ import static ua.magazines.util.ConnectionUtil.openConnection;
 
 public class SubscriptionDaoImpl implements SubscriptionDao {
 
+    private static final Logger LOGGER = Logger.getLogger(SubscriptionDaoImpl.class);
     private static final String READ_ALL = "SELECT * FROM subscription";
     private static final String CREATE = "INSERT INTO subscription(user_id, magazine_id, status) VALUES (?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM subscription WHERE id = ?";
@@ -19,13 +21,17 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
                                                "user_id = ?, magazine_id = ?, status = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM subscription WHERE id = ?";
 
-    private final Connection connection;
+    private Connection connection;
     private PreparedStatement preparedStatement;
 
-    public SubscriptionDaoImpl() throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this.connection = openConnection();
+    public SubscriptionDaoImpl() {
+        try {
+            this.connection = openConnection();
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                 | InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error(e);
+        }
     }
-
 
     @Override
     public Subscription create(Subscription subscription) {
@@ -40,14 +46,14 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
             rs.next();
             subscription.setId(rs.getInt(1));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return subscription;
     }
 
     @Override
     public Subscription read(Integer id) {
-        Subscription subscription;
+        Subscription subscription = null;
 
         try {
             preparedStatement = connection.prepareStatement(READ_BY_ID);
@@ -63,7 +69,7 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
             subscription = new Subscription(subscriptionId, userId, magazineId, status);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
 
         return subscription;
@@ -78,7 +84,7 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
             preparedStatement.setBoolean(3, subscription.getStatus());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return subscription;
     }
@@ -90,7 +96,7 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -110,7 +116,7 @@ public class SubscriptionDaoImpl implements SubscriptionDao {
                 subscriptionRecords.add(new Subscription(subscriptionId, userId, magazineId, status));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return subscriptionRecords;
     }

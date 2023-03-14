@@ -1,5 +1,6 @@
 package ua.magazines.dao.impl;
 
+import org.apache.log4j.Logger;
 import ua.magazines.dao.MagazineDao;
 import ua.magazines.entity.Magazine;
 
@@ -12,6 +13,7 @@ import static ua.magazines.util.ConnectionUtil.openConnection;
 
 public class MagazineDaoImpl implements MagazineDao{
 
+    private static final Logger LOGGER = Logger.getLogger(MagazineDaoImpl.class);
     private static final String READ_ALL = "SELECT * FROM magazine";
     private static final String CREATE = "INSERT INTO magazine(name, description, price_for_mount) VALUES (?, ?, ?)";
     private static final String READ_BY_ID = "SELECT * FROM magazine WHERE id = ?";
@@ -19,11 +21,16 @@ public class MagazineDaoImpl implements MagazineDao{
                                                "name = ?, description = ?, price_for_mount = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM magazine WHERE id = ?";
 
-    private final Connection connection;
+    private Connection connection;
     private PreparedStatement preparedStatement;
 
-    public MagazineDaoImpl() throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this.connection = openConnection();
+    public MagazineDaoImpl() {
+        try {
+            this.connection = openConnection();
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                 | InstantiationException | IllegalAccessException | SQLException e) {
+            LOGGER.error(e);
+        }
     }
 
     @Override
@@ -39,14 +46,14 @@ public class MagazineDaoImpl implements MagazineDao{
             rs.next();
             magazine.setId(rs.getInt(1));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return magazine;
     }
 
     @Override
     public Magazine read(Integer id) {
-        Magazine magazine;
+        Magazine magazine = null;
 
         try {
             preparedStatement = connection.prepareStatement(READ_BY_ID);
@@ -62,7 +69,7 @@ public class MagazineDaoImpl implements MagazineDao{
             magazine = new Magazine(magazineId, name, description, priceForMount);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
 
         return magazine;
@@ -77,7 +84,7 @@ public class MagazineDaoImpl implements MagazineDao{
             preparedStatement.setDouble(3, magazine.getPriceForMount());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return magazine;
     }
@@ -89,7 +96,7 @@ public class MagazineDaoImpl implements MagazineDao{
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
     }
 
@@ -109,7 +116,7 @@ public class MagazineDaoImpl implements MagazineDao{
                 magazineRecords.add(new Magazine(magazineId, name, description, priceForMount));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e);
         }
         return magazineRecords;
     }

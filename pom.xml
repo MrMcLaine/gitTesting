@@ -17,6 +17,8 @@
         <javax.servlet.jsp.jstl.version>1.2</javax.servlet.jsp.jstl.version>
         <!--DB-->
         <mysql.version>8.0.32</mysql.version>
+        <!--Logging-->
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
@@ -53,6 +55,13 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
+        </dependency>
+
+        <!--Logging-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>apache-log4j-extras</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
 
     </dependencies>

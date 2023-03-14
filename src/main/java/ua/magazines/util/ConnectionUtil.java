@@ -1,5 +1,7 @@
 package ua.magazines.util;
 
+import org.apache.log4j.extras.DOMConfigurator;
+
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +14,7 @@ public class ConnectionUtil {
 
     public static Connection openConnection() throws ClassNotFoundException, NoSuchMethodException,
             InvocationTargetException, InstantiationException, IllegalAccessException, SQLException {
+        DOMConfigurator.configure("loggerConfig.xml");
         Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
         return DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD);
     }
