@@ -18,7 +18,7 @@ public class RegistrationServlet extends HttpServlet {
     private final UserService userService = UserServiceImpl.getUserService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String email = req.getParameter("email");
@@ -28,8 +28,8 @@ public class RegistrationServlet extends HttpServlet {
             userService.create(new User(firstName, lastName, email, password, Role.USER));
         }
 
-        req.setAttribute("email", email);
-
-        req.getRequestDispatcher("/cabinet.jsp").forward(req, resp);
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write("Success");
     }
 }

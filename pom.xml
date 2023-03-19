@@ -42,6 +42,12 @@
             <artifactId>jstl</artifactId>
             <version>${javax.servlet.jsp.jstl.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/taglibs/standard -->
         <dependency>
@@ -63,6 +69,7 @@
             <artifactId>apache-log4j-extras</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
 
     </dependencies>
     <build>

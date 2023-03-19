@@ -1,5 +1,7 @@
 package ua.magazines.web;
 
+import com.google.gson.Gson;
+import ua.magazines.dto.UserLogin;
 import ua.magazines.entity.User;
 import ua.magazines.service.UserService;
 import ua.magazines.service.impl.UserServiceImpl;
@@ -20,15 +22,22 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String login = req.getParameter("login");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
 
         try {
-            User user = userService.getUserByEmail(login);
+            User user = userService.getUserByEmail(email);
 
-            if (user.getPassword().equals(password)) {
-                req.setAttribute("email", login);
-                req.getRequestDispatcher("cabinet.jsp").forward(req, resp);
+            if (user != null && user.getPassword().equals(password)) {
+
+                UserLogin userLogin = new UserLogin();
+                userLogin.destinationUrl = "cabinet.jsp";
+                userLogin.userEmail = user.getEmail();
+                String json = new Gson().toJson(userLogin);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write("json");
+
             } else {
                 req.getRequestDispatcher("login.jsp").forward(req, resp);
             }
