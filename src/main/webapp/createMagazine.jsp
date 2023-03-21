@@ -64,7 +64,7 @@
         crossorigin="anonymous"></script>
 <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="js/header.js"></script>
+<script src="resources/js/header.js"></script>
 <script src="resources/js/serverCalls.js"></script>
 </body>
 </html>

@@ -43,8 +43,29 @@
 
   <servlet-mapping>
     <servlet-name>magazineServlet</servlet-name>
-    <url-pattern>/product</url-pattern>
+    <url-pattern>/magazine</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>homePageServlet</servlet-name>
+    <servlet-class>ua.magazines.web.HomePageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>homePageServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>paymentServlet</servlet-name>
+    <servlet-class>ua.magazines.web.PaymentServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>paymentServlet</servlet-name>
+    <url-pattern>/payment</url-pattern>
+  </servlet-mapping>
+
 
 </web-app>
 

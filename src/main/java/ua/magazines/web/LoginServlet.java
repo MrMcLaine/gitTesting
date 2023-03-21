@@ -6,13 +6,12 @@ import ua.magazines.entity.User;
 import ua.magazines.service.UserService;
 import ua.magazines.service.impl.UserServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serial;
-import java.util.NoSuchElementException;
 
 public class LoginServlet extends HttpServlet {
     @Serial
@@ -20,30 +19,27 @@ public class LoginServlet extends HttpServlet {
     private final UserService userService = UserServiceImpl.getUserService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-        try {
-            User user = userService.getUserByEmail(email);
+        User user = userService.getUserByEmail(email);
 
-            if (user != null && user.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password)) {
 
-                UserLogin userLogin = new UserLogin();
-                userLogin.destinationUrl = "cabinet.jsp";
-                userLogin.userEmail = user.getEmail();
-                String json = new Gson().toJson(userLogin);
-                resp.setContentType("application/json");
-                resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write("json");
+            HttpSession session = request.getSession(true);
+            session.setAttribute("userId", user.getId());
 
-            } else {
-                req.getRequestDispatcher("login.jsp").forward(req, resp);
-            }
+            UserLogin userLogin = new UserLogin();
+            userLogin.destinationUrl = "cabinet.jsp";
+            userLogin.userEmail = user.getEmail();
 
-        } catch (NoSuchElementException e) {
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            String json = new Gson().toJson(userLogin);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
         }
     }
 }

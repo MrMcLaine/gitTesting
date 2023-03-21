@@ -17,7 +17,7 @@ public class MagazineServlet extends HttpServlet {
 
     // to create resource (magazine)
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String price = request.getParameter("price");
@@ -36,25 +36,29 @@ public class MagazineServlet extends HttpServlet {
         return Double.parseDouble(price);
     }
 
-    // to get resource (product)
+    // to get resource (magazine)
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String magazineId = request.getParameter("id");
 
+        Magazine magazine = magazineService.read(Integer.parseInt(magazineId));
+
+        request.setAttribute("singleMagazine", magazine);
+        request.getRequestDispatcher("singleMagazine.jsp").forward(request, response);
     }
 
-    // to update resource (product)
+    // to update resource (magazine)
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         super.doPut(req, resp);
     }
 
-    // to delete resource (product)
+    // to delete resource (magazine)
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         super.doDelete(req, resp);
     }
-
 }
