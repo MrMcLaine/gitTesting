@@ -18,5 +18,18 @@ $("button.product-logout").click(function() {
             window.location = customUrl;
         }
     });
+});
 
+$(document).ready(function() {
+    $.get("user-role", function(data) {
+        if (data !== '') {
+            userRole = data;
+        }
+    }).done(function() {
+        if (userRole === 'ADMIN') {
+            $('li.user-bucket-option').hide();
+        } else {
+            $('li.create-product-option').hide();
+        }
+    });
 });

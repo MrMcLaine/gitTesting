@@ -15,10 +15,10 @@
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item create-product-option">
                     <a class="nav-link" href="${pageContext.request.contextPath}/createMagazine.jsp">add Magazine</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item user-bucket-option">
                     <a class="nav-link" href="${pageContext.request.contextPath}/bucket.jsp">Bucket</a>
                 </li>
             </ul>

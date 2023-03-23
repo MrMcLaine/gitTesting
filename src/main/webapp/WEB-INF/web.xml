@@ -75,6 +75,16 @@
     <servlet-name>bucketServlet</servlet-name>
     <url-pattern>/bucket</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>roleServlet</servlet-name>
+    <servlet-class>ua.magazines.web.UserRoleServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>roleServlet</servlet-name>
+    <url-pattern>/user-role</url-pattern>
+  </servlet-mapping>
 </web-app>
 
 
