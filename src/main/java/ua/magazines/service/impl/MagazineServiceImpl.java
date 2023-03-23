@@ -7,6 +7,9 @@ import ua.magazines.entity.Magazine;
 import ua.magazines.service.MagazineService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class MagazineServiceImpl implements MagazineService {
     private static final Logger LOGGER = Logger.getLogger(MagazineServiceImpl.class);
@@ -54,5 +57,10 @@ public class MagazineServiceImpl implements MagazineService {
     public List<Magazine> readAll() {
         LOGGER.info("read all magazines");
         return magazineDao.readAll();
+    }
+
+    @Override
+    public Map<Integer, Magazine> readAllMap() {
+        return readAll().stream().collect(Collectors.toMap(Magazine::getId, Function.identity()));
     }
 }

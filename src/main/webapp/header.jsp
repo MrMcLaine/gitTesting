@@ -1,7 +1,5 @@
 <link rel="stylesheet" href="resources/css/header.css">
 
-
-
 <div id="wrapper" class="animate">
     <nav class="navbar header-top fixed-top navbar-expand-lg  navbar-dark bg-dark">
         <span class="navbar-toggler-icon leftmenutrigger"></span>

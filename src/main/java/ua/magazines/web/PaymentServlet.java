@@ -4,6 +4,7 @@ import ua.magazines.entity.Payment;
 import ua.magazines.service.PaymentService;
 import ua.magazines.service.impl.PaymentServiceImpl;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,15 @@ public class PaymentServlet extends HttpServlet {
 
         Payment payment = new Payment(userId, Integer.parseInt(magazineId), new Date(), Double.parseDouble(price));
         paymentService.create(payment);
+
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("Success");
+    }
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String paymentId = request.getParameter("paymentId");
+        paymentService.delete(Integer.parseInt(paymentId));
 
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
