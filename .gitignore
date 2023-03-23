@@ -39,3 +39,8 @@ build/
 /.idea/encodings.xml
 /.idea/jpa-buddy.xml
 /.idea/uiDesigner.xml
+/.idea/dataSources/
+/.idea/dataSources.local.xml
+/.idea/dataSources.xml
+/.idea/sqldialects.xml
+/Task.txt
